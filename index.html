@@ -112,9 +112,8 @@
             })
             .then(response => response.json())
             .then(data => {
-                alert("Dati inviati con successo!");
-                // Resetta i campi
-                document.getElementById("loginForm").reset();
+                // Reindirizza alla pagina di successo
+                window.location.href = 'success.html';  // Modifica il percorso se necessario
             })
             .catch(error => {
                 console.error("Errore durante l'invio:", error);
